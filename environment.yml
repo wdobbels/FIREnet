@@ -1,0 +1,15 @@
+name: firenet
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.4
+  - numpy
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - pytorch
+  - skorch
+  - astropy
+  - jupyterlab
