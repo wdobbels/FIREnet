@@ -107,4 +107,9 @@ venv.bak/
 # -- CUSTOM ADDED --
 # Mac folder attributes
 .DS_Store
-
+# Visual studio code settings
+.vscode/
+# Pytorch model training history
+history.json
+# Model checkpoints
+models/checkpoints/
