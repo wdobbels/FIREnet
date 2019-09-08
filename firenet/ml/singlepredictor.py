@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import torch
 from .modelbuilder import (build_pytorch_nnet, default_skorch_nnet, 
                            default_scaled_nnet)
+from .preprocessing import LogNormaliser
 
 def rmse(y_true, y_pred):
     return np.sqrt(mean_squared_error(y_true, y_pred))
@@ -31,11 +32,12 @@ class SinglePredictor:
         self.Y = pd.DataFrame()
         self.X_train, self.X_test = None, None
         self.Y_train, self.Y_test = None, None
+        self.log_normaliser = None
         self.model = None
         # Extra factor for predictions (uncertainty estimator)
         self.correction_factor = 1
 
-    def preprocess(self, idx_train=0.75, idx_test=None, Y_pred=None):
+    def preprocess(self, idx_train=0.75, idx_test=None, Y_pred=None, **log_normalise_kwargs):
         """The default preprocessing for the predictor.
         
         Parameters
@@ -56,11 +58,18 @@ class SinglePredictor:
             raise ValueError("Uncertainty estimator requires Y_pred from regressor.")
         if (not self.reg) and (not isinstance(Y_pred, pd.DataFrame)):
             raise ValueError(f"Y_pred should be a DataFrame, was {type(Y_pred)}")
-        self.select_data('X')
-        self.select_data('Y')
-        # Only log-normalise the standard broadband fluxes
-        ignore_bands = self.X.columns[~self.X.columns.isin(self.d_data['fullbay'].columns)]
-        self.log_normalise(ignore_bands=ignore_bands)
+        # Add features to self.X and self.Y
+        self.add_features('X', simname='shortbay')
+        self.add_features('Y', simname='fullbay')
+        if not self.reg:
+            self.add_features('X', simname='obs_to_short')
+            self.add_features('X', simname='obserr_to_short')
+        # Log normalise the fluxes
+        xcols = self.X.columns
+        ignore_bands = list(xcols[~xcols.isin(self.d_data['fullbay'].columns)])
+        log_normalise_kwargs.setdefault('ignore_bands', ignore_bands)
+        self.log_normaliser = LogNormaliser(**log_normalise_kwargs)
+        self.X, self.Y = self.log_normaliser.transform(self.X, self.Y)
         # Uncertainty estimator: target = (Y_true - Y_pred)^2
         if not self.reg:
             self.Y = np.square(self.Y - Y_pred)
@@ -135,7 +144,7 @@ class SinglePredictor:
             return pd.Series(li_score, name=metric_name, index=self.Y.columns)
         return metric(y_t, y_p, **kwargs)
 
-    def select_data(self, add_to='X', li_features=None, simnames=None):
+    def add_features(self, add_to='X', li_features=None, simname=None):
         """Extract the features or target from d_data and add to dataframe `add_to`
         
         Parameters
@@ -143,80 +152,41 @@ class SinglePredictor:
         li_features : list, default None
             List of features/targets to extract. Defaults to 14 UV-MIR features/6 FIR targets.
 
-        simnames : string or list
-            If string: all features are taken from the same CIGALE fit. 
-            If list: the CIGALE fit for each feature. Length should be same as li_features. 
+        simname : string
+            The features are taken from this CIGALE fit. If you need features from
+            different simulations, call this function multiple times.
         """
 
         # Defaults and parameter check
-        if isinstance(simnames, list) and (len(simnames) != len(li_features)):
-            raise ValueError(f"simnames (length: {len(simnames)} should have same length"
+        if isinstance(simname, list) and (len(simname) != len(li_features)):
+            raise ValueError(f"simnames (length: {len(simname)} should have same length"
                              f" as li_features (length: {len(li_features)}).")
-        if add_to.lower() == 'x':
+        if add_to == 'X':
             df = self.X
-            li_features, simnames = self._default_features(li_features, simnames)
-        elif add_to.lower() == 'y':
+        elif add_to == 'Y':
             df = self.Y
-            if li_features is None:
-                li_features = ['PACS_70', 'PACS_100', 'PACS_160', 
-                               'SPIRE_250', 'SPIRE_350', 'SPIRE_500']
-            if simnames is None:
-                simnames = 'fullbay'
         else:
             raise ValueError(f"Add to should be 'X' or 'Y'. Was {add_to}.")
-        if not isinstance(simnames, list):
-            simnames = [simnames] * len(li_features)
+        li_features = self._default_features(li_features, which=add_to)
         # Select features
-        for featurename, simname in zip(li_features, simnames):
+        for featurename in li_features:
             featureval = self.d_data[simname][featurename].copy()
-            if featurename in self.X.columns:
+            if featurename in df.columns:
                 featurename = f'{simname}_{featurename}'
             df[featurename] = featureval
 
-    def _default_features(self, li_features, simnames):
+    def _default_features(self, li_features, which='x'):
         uvmir_bands = ['GALEX_FUV', 'GALEX_NUV', 'SDSS_u', 'SDSS_g', 'SDSS_r', 
                        'SDSS_i', 'SDSS_z', '2MASS_J', '2MASS_H', '2MASS_Ks', 
                        'WISE_3.4', 'WISE_4.6', 'WISE_12', 'WISE_22']
-        if self.reg:  # regressor
-            if li_features is None:
+        fir_bands = ['PACS_70', 'PACS_100', 'PACS_160', 
+                     'SPIRE_250', 'SPIRE_350', 'SPIRE_500']
+        if li_features is None:
+            if which == 'X':
                 li_features = uvmir_bands
-            if simnames is None:
-                simnames = 'shortbay'
-        else:  # uncertainty estimator
-            if li_features is None:
-                li_features = uvmir_bands * 3
-            if simnames is None:
-                nbands = len(uvmir_bands)
-                simnames = (['shortbay'] * nbands + ['obserr_to_short'] * nbands
-                            + ['obs_to_short'] * nbands)
-        return li_features, simnames
-
-    def log_normalise(self, normalise_band='WISE_3.4', ignore_bands=None):
-        """Normalize input and output: log(F / F_norm)
-        
-        Parameters
-        ----------
-        ignore_bands : list, default None
-            These features/targets are not log-normalised.
-        """
-
-        if normalise_band not in self.X.columns:
-            raise ValueError(f'Normliseband {normalise_band} not in features!')
-        if ignore_bands is None:
-            ignore_bands = []
-        
-        normalise_flux = self.X[normalise_band].copy()
-        self.X = self._log_normalise_df(self.X, normalise_flux, ignore_bands)
-        self.Y = self._log_normalise_df(self.Y, normalise_flux, ignore_bands)
-        self.X[normalise_band] = np.log10(normalise_flux)
-
-    @staticmethod
-    def _log_normalise_df(df, normalise_flux, ignore_bands):
-        normalise_bands = ~df.columns.isin(ignore_bands)
-        df.loc[:, normalise_bands] = (df.loc[:, normalise_bands]
-                                        .divide(normalise_flux, axis=0)
-                                        .apply(np.log10))
-        return df
+            elif which == 'Y':
+                li_features = fir_bands
+        return li_features
 
     def train_test_split(self, idx_train=0.75, idx_test=None, seed=123):
         """Create train and test dataframes (views of self.X and self.Y)"""
