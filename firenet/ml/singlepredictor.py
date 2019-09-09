@@ -1,4 +1,5 @@
 import pickle
+from abc import ABC, abstractmethod  # abstract base class
 import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score, mean_squared_error
@@ -18,16 +19,15 @@ def mean_chisq(ydiff_sq, y_err):
 METRICS = {'r2': r2_score, 'mse': mean_squared_error,
            'rmse': rmse, 'mean_chisq': mean_chisq}
 
-class SinglePredictor:
+class SinglePredictor(ABC):
     """Single model, trained on one train/test split. 
     Either a regressor or uncertainty estimator. """
 
-    def __init__(self, d_data, reg=True):
+    def __init__(self, d_data):
         if d_data is None:
             with open('./data/d_data.pkl', 'rb') as ddf_file:
                 d_data = pickle.load(ddf_file)
         self.d_data = d_data
-        self.reg = reg  # True: regressor, False: uncertainty estimator
         self.X, self.Y = None, None
         self.X_train, self.X_test = None, None
         self.Y_train, self.Y_test = None, None
@@ -36,7 +36,7 @@ class SinglePredictor:
         # Extra factor for predictions (uncertainty estimator)
         self.correction_factor = 1
 
-    def preprocess(self, idx_train=0.75, idx_test=None, Y_pred=None, **log_normalise_kwargs):
+    def preprocess(self, idx_train=0.75, idx_test=None, **kwargs):
         """The default preprocessing for the predictor.
         
         Parameters
@@ -53,34 +53,22 @@ class SinglePredictor:
             (Y_true - Y_pred)^2 as a target.
         """
 
-        if (not self.reg) and Y_pred is None:
-            raise ValueError("Uncertainty estimator requires Y_pred from regressor.")
-        if (not self.reg) and (not isinstance(Y_pred, pd.DataFrame)):
-            raise ValueError(f"Y_pred should be a DataFrame, was {type(Y_pred)}")
         # Select features and target
-        if self.reg:
-            self.X = FeatureSelect.select_xreg(self.d_data)
-        else:
-            self.X = FeatureSelect.select_xunc(self.d_data)
+        self.X = self._feature_select()
         self.Y = FeatureSelect.select_y(self.d_data)
         # Log normalise the fluxes
         xcols = self.X.columns
         ignore_bands = list(xcols[~xcols.isin(self.d_data['fullbay'].columns)])
-        log_normalise_kwargs.setdefault('ignore_bands', ignore_bands)
-        self.log_normaliser = LogNormaliser(**log_normalise_kwargs)
+        kwargs.setdefault('ignore_bands', ignore_bands)
+        self.log_normaliser = LogNormaliser(**kwargs)
         self.X, self.Y = self.log_normaliser.transform(self.X, self.Y)
-        # Uncertainty estimator: target = (Y_true - Y_pred)^2
-        if not self.reg:
-            self.Y = np.square(self.Y - Y_pred)
         self.train_test_split(idx_train, idx_test)
 
     def train(self, model=None, apply_correction=True, **predictor_kwargs):
         """Train the model."""
 
         if model is None:
-            default_nnet = 'neuralnet_scaled' if self.reg else 'neuralnet'
-            model = self.build_model(['std_scale', default_nnet], 
-                                     **predictor_kwargs)
+            model = self._get_default_model(**predictor_kwargs)
         self.model = model
 
         # Skorch only supports numpy arrays, no DataFrames
@@ -89,9 +77,8 @@ class SinglePredictor:
         self.Y_pred = self.predict(self.X)
         self.Y_pred_train = self.Y_pred.loc[self.X_train.index, :]
         self.Y_pred_test = self.Y_pred.loc[self.X_test.index, :]
-        # Correct to unit validation mean chisq
-        if (not self.reg) and apply_correction:
-            self.unit_chisq_correction()
+        # Uncertainty estimator: correct to unit validation mean chisq
+        self._apply_correction(apply_correction)
 
     def predict_idx(self, idx):
         """Predict on a set of indices (which are in X)"""
@@ -129,7 +116,7 @@ class SinglePredictor:
 
         y_t, y_p = self.get_target_set(tset)
         if metric is None:
-            metric = 'rmse' if self.reg else 'mean_chisq'
+            metric = self._get_default_metric()
         if metric in METRICS:
             metric_name = metric
             metric = METRICS[metric]
@@ -165,7 +152,7 @@ class SinglePredictor:
         self.X_train, self.X_test = self.X.loc[idx_train], self.X.loc[idx_test]
         self.Y_train, self.Y_test = self.Y.loc[idx_train], self.Y.loc[idx_test]
 
-    def get_target_set(self, tset='test', to_err=True):
+    def get_target_set(self, tset='test', **kwargs):
         """
         Get true and predicted target for the given set (train or test).
         
@@ -191,9 +178,21 @@ class SinglePredictor:
             else:
                 raise ValueError(f"Invalid target set {tset}. Should be train, test, "
                                  "tr, or val.")
-        if (not self.reg) and to_err:
-            y_p = 1 / np.sqrt(y_p)
         return y_t, y_p
+
+    @abstractmethod
+    def _feature_select(self):
+        pass
+
+    def _get_default_model(self, **predictor_kwargs):
+        pass
+
+    def _apply_correction(self, should_apply):
+        pass
+
+    @abstractmethod
+    def _get_default_metric(self):
+        pass
 
     def _get_tr_val(self, which='tr'):
         idx = 0 if which == 'tr' else 1
@@ -215,7 +214,7 @@ class SinglePredictor:
             The steps of the pipeline, as strings or transformers/models.
         """
 
-        nnet_kwargs = dict(reg=self.reg, insize=self.X.shape[1], 
+        nnet_kwargs = dict(reg=self._is_reg(), insize=self.X.shape[1], 
                            outsize=self.Y.shape[1], **predictor_kwargs)
         d_transformers = {'std_scale': StandardScaler(), 
                           'neuralnet': default_skorch_nnet(**nnet_kwargs),
@@ -231,11 +230,68 @@ class SinglePredictor:
             pipeline.append(step)
         return Pipeline(pipeline)
 
+    @abstractmethod
+    def _is_reg(self):
+        pass
+
+    @staticmethod
+    def to_array(X):
+        if isinstance(X, (pd.Series, pd.DataFrame)):
+            X = X.values
+        return X.astype(np.float32)
+
+
+class SingleRegressor(SinglePredictor):
+    """Single regressor, trained on one train/test split."""
+
+    def _feature_select(self):
+        return FeatureSelect.select_xreg(self.d_data)
+
+    def _get_default_model(self, **predictor_kwargs):
+        return self.build_model(['std_scale', 'neuralnet_scaled'], **predictor_kwargs)
+
+    def _get_default_metric(self):
+        return 'rmse'
+
+    def _is_reg(self):
+        return True
+
+
+class SingleUncertaintyEstimator(SinglePredictor):
+    """Single uncertainty estimator, trained on one train/test split."""
+
+    def preprocess(self, idx_train=0.75, idx_test=None, **kwargs):
+        Y_pred = kwargs.pop('Y_pred', None)
+        self._check_Y_pred(Y_pred)
+        super().preprocess(idx_train=idx_train, idx_test=idx_test, **kwargs)
+        # Uncertainty estimator: target = (Y_true - Y_pred)^2
+        self.Y = self._transform_target(self.Y, Y_pred)
+        self.Y_train = self._transform_target(self.Y_train, Y_pred)
+        self.Y_test = self._transform_target(self.Y_test, Y_pred)
+
+    def _check_Y_pred(self, Y_pred):
+        if Y_pred is None:
+            raise ValueError("Uncertainty estimator requires Y_pred from regressor.")
+        if not isinstance(Y_pred, pd.DataFrame):
+            raise ValueError(f"Y_pred should be a DataFrame, was {type(Y_pred)}")
+
+    def _feature_select(self):
+        return FeatureSelect.select_xunc(self.d_data)
+
+    @staticmethod
+    def _transform_target(Y, Y_pred):
+        return np.square(Y - Y_pred.loc[Y.index, :])
+
+    def _get_default_model(self, **predictor_kwargs):
+        return self.build_model(['std_scale', 'neuralnet'], **predictor_kwargs)
+
+    def _apply_correction(self, should_apply):
+        if should_apply:
+            self.unit_chisq_correction()
+
     def unit_chisq_correction(self):
         """Sets the correction factor so the validation set has \chi^2 = 1."""
 
-        if self.reg:
-            raise ValueError('Unit \chi^2 correction does not make sense for regressor.')
         Y_diff_sq, Y_err = self.get_target_set('val')
         chi_sq = Y_diff_sq / np.square(Y_err)
         agg = lambda band: 1 / np.mean(chi_sq[band])
@@ -247,9 +303,15 @@ class SinglePredictor:
         for pred in li_preds:
             pred.loc[:, :] = pred.multiply(self.correction_factor, axis=1)
         return self.correction_factor
+    
+    def _get_default_metric(self):
+        return 'mean_chisq'
 
-    @staticmethod
-    def to_array(X):
-        if isinstance(X, (pd.Series, pd.DataFrame)):
-            X = X.values
-        return X.astype(np.float32)
+    def get_target_set(self, tset='test', **kwargs):
+        y_t, y_p = super().get_target_set(tset=tset, **kwargs)
+        if kwargs.get('to_err', True):
+            y_p = 1 / np.sqrt(y_p)
+        return y_t, y_p
+
+    def _is_reg(self):
+        return False

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from .singlepredictor import SinglePredictor
+from .singlepredictor import SingleRegressor, SingleUncertaintyEstimator
 
 class RegUncPredictor:
     """
@@ -9,8 +9,8 @@ class RegUncPredictor:
     """
     def __init__(self, d_data):
         self.d_data = d_data
-        self.reg = SinglePredictor(d_data, reg=True)
-        self.unc = SinglePredictor(d_data, reg=False)
+        self.reg = SingleRegressor(d_data)
+        self.unc = SingleUncertaintyEstimator(d_data)
 
     def preprocess(self, idx_train=0.75, idx_test=None):
         """The default preprocessing for the predictor.

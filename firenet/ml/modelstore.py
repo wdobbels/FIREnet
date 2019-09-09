@@ -3,7 +3,7 @@ import pickle
 from .fullsetpredictor import FullSetPredictor
 from .modelbuilder import create_uncertainty_loss
 from .reguncpredictor import RegUncPredictor
-from .singlepredictor import SinglePredictor
+from .singlepredictor import SinglePredictor, SingleRegressor, SingleUncertaintyEstimator
 from .util import get_neuralnetregressor
 
 class ModelStore:
@@ -33,7 +33,8 @@ class ModelStore:
         with savefile.open('rb') as inf:
             saveobj = pickle.load(inf)
         classname = saveobj['classname']
-        if classname == 'SinglePredictor':
+        if ((classname == 'SingleRegressor') or
+            (classname == 'SingleUncertaintyEstimator')):
             return self._load_singlepredictor(saveobj, d_data, **kwargs)
         elif classname == 'RegUncPredictor':
             return self._load_reguncpredictor(saveobj, d_data)
@@ -51,13 +52,12 @@ class ModelStore:
     @staticmethod
     def _get_saveobj(model, stringify_loss, **meta_kwargs):
         saveobj = meta_kwargs.copy()
+        saveobj['classname'] = type(model).__name__
         if isinstance(model, SinglePredictor):
-            saveobj['classname'] = 'SinglePredictor'
             saveobj_pred, cb = ModelStore._get_saveobj_singlepredictor(
                             model, stringify_loss)
             saveobj.update(saveobj_pred)
         elif isinstance(model, RegUncPredictor):
-            saveobj['classname'] = 'RegUncPredictor'
             saveobj_reg, cb_reg = ModelStore._get_saveobj_singlepredictor(
                                         model.reg, stringify_loss)
             saveobj_unc, cb_unc = ModelStore._get_saveobj_singlepredictor(
@@ -68,7 +68,6 @@ class ModelStore:
             saveobj['reg'] = saveobj_reg
             saveobj['unc'] = saveobj_unc
         elif isinstance(model, FullSetPredictor):
-            saveobj['classname'] = 'FullSetPredictor'
             li_cb = []
             li_prednames = []
             for i, predictor in enumerate(model.predictors):
@@ -127,9 +126,14 @@ class ModelStore:
 
     @staticmethod
     def _load_singlepredictor(saveobj, d_data, reg=True, Y_pred=None):
-        pred = SinglePredictor(d_data, reg=reg)
+        d_reg_class = {True: SingleRegressor, 
+                       False: SingleUncertaintyEstimator}
+        pred = d_reg_class[reg](d_data)  # instantiate predictor
+        kwargs = {}
+        if not reg:
+            kwargs['Y_pred'] = Y_pred
         pred.preprocess(saveobj['idx_train'], saveobj['idx_test'],
-                                   Y_pred=Y_pred)
+                        **kwargs)
         # Load model
         model = saveobj['model']
         if saveobj['stringify_loss']:
