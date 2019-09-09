@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import torch
 from .modelbuilder import (build_pytorch_nnet, default_skorch_nnet, 
                            default_scaled_nnet)
-from .preprocessing import LogNormaliser
+from .preprocessing import LogNormaliser, FeatureSelect
 
 def rmse(y_true, y_pred):
     return np.sqrt(mean_squared_error(y_true, y_pred))
@@ -28,8 +28,7 @@ class SinglePredictor:
                 d_data = pickle.load(ddf_file)
         self.d_data = d_data
         self.reg = reg  # True: regressor, False: uncertainty estimator
-        self.X = pd.DataFrame()
-        self.Y = pd.DataFrame()
+        self.X, self.Y = None, None
         self.X_train, self.X_test = None, None
         self.Y_train, self.Y_test = None, None
         self.log_normaliser = None
@@ -58,12 +57,12 @@ class SinglePredictor:
             raise ValueError("Uncertainty estimator requires Y_pred from regressor.")
         if (not self.reg) and (not isinstance(Y_pred, pd.DataFrame)):
             raise ValueError(f"Y_pred should be a DataFrame, was {type(Y_pred)}")
-        # Add features to self.X and self.Y
-        self.add_features('X', simname='shortbay')
-        self.add_features('Y', simname='fullbay')
-        if not self.reg:
-            self.add_features('X', simname='obs_to_short')
-            self.add_features('X', simname='obserr_to_short')
+        # Select features and target
+        if self.reg:
+            self.X = FeatureSelect.select_xreg(self.d_data)
+        else:
+            self.X = FeatureSelect.select_xunc(self.d_data)
+        self.Y = FeatureSelect.select_y(self.d_data)
         # Log normalise the fluxes
         xcols = self.X.columns
         ignore_bands = list(xcols[~xcols.isin(self.d_data['fullbay'].columns)])
@@ -143,50 +142,6 @@ class SinglePredictor:
                             for band in self.Y.columns]
             return pd.Series(li_score, name=metric_name, index=self.Y.columns)
         return metric(y_t, y_p, **kwargs)
-
-    def add_features(self, add_to='X', li_features=None, simname=None):
-        """Extract the features or target from d_data and add to dataframe `add_to`
-        
-        Parameters
-        ----------
-        li_features : list, default None
-            List of features/targets to extract. Defaults to 14 UV-MIR features/6 FIR targets.
-
-        simname : string
-            The features are taken from this CIGALE fit. If you need features from
-            different simulations, call this function multiple times.
-        """
-
-        # Defaults and parameter check
-        if isinstance(simname, list) and (len(simname) != len(li_features)):
-            raise ValueError(f"simnames (length: {len(simname)} should have same length"
-                             f" as li_features (length: {len(li_features)}).")
-        if add_to == 'X':
-            df = self.X
-        elif add_to == 'Y':
-            df = self.Y
-        else:
-            raise ValueError(f"Add to should be 'X' or 'Y'. Was {add_to}.")
-        li_features = self._default_features(li_features, which=add_to)
-        # Select features
-        for featurename in li_features:
-            featureval = self.d_data[simname][featurename].copy()
-            if featurename in df.columns:
-                featurename = f'{simname}_{featurename}'
-            df[featurename] = featureval
-
-    def _default_features(self, li_features, which='x'):
-        uvmir_bands = ['GALEX_FUV', 'GALEX_NUV', 'SDSS_u', 'SDSS_g', 'SDSS_r', 
-                       'SDSS_i', 'SDSS_z', '2MASS_J', '2MASS_H', '2MASS_Ks', 
-                       'WISE_3.4', 'WISE_4.6', 'WISE_12', 'WISE_22']
-        fir_bands = ['PACS_70', 'PACS_100', 'PACS_160', 
-                     'SPIRE_250', 'SPIRE_350', 'SPIRE_500']
-        if li_features is None:
-            if which == 'X':
-                li_features = uvmir_bands
-            elif which == 'Y':
-                li_features = fir_bands
-        return li_features
 
     def train_test_split(self, idx_train=0.75, idx_test=None, seed=123):
         """Create train and test dataframes (views of self.X and self.Y)"""
