@@ -1,0 +1,11 @@
+.plot#uncertainty_validation {
+    max-width: 1300px;
+    height: 600px;
+}
+
+.plot {
+    display: none;
+}
+.plot.active {
+    display: block;
+}

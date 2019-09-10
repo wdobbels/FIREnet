@@ -4,11 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Test plotly js</title>
-    <script src="https://cdn.plot.ly/plotly-1.49.4.min.js"></script>
+    <link rel="stylesheet" href="assets/css/tabs.css">
+    <link rel="stylesheet" href="assets/css/plots.css">
+    <title>FIREnet - interactive plots</title>
 </head>
 <body>
-    <div id="mainplot" style="width:600px;height:600px;"></div>
-    <script src="assets/js/plotlyjs_01.js"></script>
+    <!-- Tabs -->
+    <div class="tabs">
+        <div id="tvp-tab" class="tab"><span>True vs predicted</span></div>
+        <div id="unc-tab" class="tab active"><span>Uncertainty validation</span></div>
+    </div>
+    <!-- Plots -->
+    <div id="true_vs_predicted" class="plot">True vs Predicted plot</div>
+    <div id="uncertainty_validation" class="plot active"></div>
+    <div id="sed" class="plot active">SED plot</div>
+    <!-- Scripts -->
+    <script src="https://cdn.plot.ly/plotly-1.49.4.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    <script src="assets/js/tab_manager.js"></script>
+    <script src="assets/js/plot_uncertainty_validation.js"></script>
+    <script src="assets/js/plot_sed.js"></script>
 </body>
 </html>
