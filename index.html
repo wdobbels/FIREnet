@@ -12,12 +12,12 @@
 <body>
     <!-- Tabs -->
     <div class="tabs">
-        <div id="tvp-tab" class="tab"><span>True vs predicted</span></div>
-        <div id="unc-tab" class="tab c-active"><span>Uncertainty validation</span></div>
+        <div id="tvp-tab" class="tab c-active"><span>True vs predicted</span></div>
+        <div id="unc-tab" class="tab"><span>Uncertainty validation</span></div>
     </div>
     <!-- Plots -->
-    <div id="true_vs_predicted" class="c-plot"></div>
-    <div id="uncertainty_validation" class="c-plot c-active"></div>
+    <div id="true_vs_predicted" class="c-plot c-active"></div>
+    <div id="uncertainty_validation" class="c-plot"></div>
     <div id="sed" class="c-plot c-active"></div>
     <!-- Scripts -->
     <script src="https://d3js.org/d3-color.v1.min.js"></script>
@@ -25,6 +25,7 @@
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
     <script src="assets/js/tab_manager.js"></script>
+    <script src="./assets/js/plot_tvp.js"></script>
     <script src="assets/js/plot_uncertainty_validation.js"></script>
     <script src="./assets/js/plot_sed.js"></script>
 </body>
