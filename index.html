@@ -4,12 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="assets/css/body.css">
     <link rel="stylesheet" href="assets/css/tabs.css">
     <link rel="stylesheet" href="assets/css/plots.css">
     <title>FIREnet - interactive plots</title>
     <script src="https://cdn.plot.ly/plotly-1.49.4.min.js"></script>
 </head>
 <body>
+    <!-- Header -->
+    <div class="container">
+        <h1>FIREnet: interactive plots</h1>
+        <p>Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
+                aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
+                galaxy, based on the ultraviolet to mid-infrared (UV-MIR) SED.</p>
+        <p>Below you can find the interactive figures for the FIREnet project. The main github page, with its scripts and jupyter notebooks, can be found <a href="https://github.com/wdobbels/FIREnet">here</a>. The accompanying paper, <i>"Predicting the global far-infrared SED of galaxies via machine learning techniques"</i>, will be linked here once accepted.
+        </p>
+        <p><i>Click on the tabs below to switch figures. Click on one of the data points to select a particular galaxy, which then also shows its SED in the plot below. Clicking on the legend elements allows you to show/hide elements.</i></p>
+    </div>
     <!-- Tabs -->
     <div class="tabs">
         <div id="tvp-tab" class="tab c-active"><span>True vs predicted</span></div>

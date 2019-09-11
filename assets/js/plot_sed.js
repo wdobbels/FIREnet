@@ -1,5 +1,9 @@
 // Global function
-let sed_globals = {};
+let sed_globals = {
+    selectedColor: '#f76d16',
+    selectedOpacity: 1.,
+    selectedSize: 8.
+};
 
 // Put all in anonymous function to avoid scope overlap between scripts
 (function(){

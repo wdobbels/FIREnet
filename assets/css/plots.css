@@ -1,13 +1,15 @@
 .c-plot {
     display: none;
     max-width: 1300px;
+    margin: 0 auto;
 }
 .c-plot.c-active {
     display: block;
 }
 
 .c-plot#true_vs_predicted {
-    height: 600px;
+    height: 800px;
+    max-width: 1100px;
 }
 
 .c-plot#uncertainty_validation {

@@ -6,9 +6,9 @@
     let size_value = 6.;
 
     // Array of properties for each datapoint
-    let default_colors;
-    let default_opacity;
-    let default_size;
+    let defaultColors;
+    let defaultOpacities;
+    let defaultSizes;
 
     let plotDiv;
 
@@ -32,7 +32,7 @@
             }
         }
         c = toColors(c);  // Immediately go to rgb/hex, so we can change on highlight
-        default_colors = c;
+        defaultColors = c;
         let traces = [scatterTrace(x, y, c, names), oneToOneTrace(false), 
                     oneToOneTrace(true), binnedTrace(xbin, ybin),
                     binnedTrace(xbin, ybin, true)];
@@ -59,7 +59,7 @@
             }
         }
         Plotly.newPlot(plotDiv, traces, layout);
-        plotDiv.on('plotly_click', on_click);
+        plotDiv.on('plotly_click', onClick);
     }
 
     // Continuous color to rgb or hex
@@ -80,8 +80,8 @@
             opacity.push(opacity_value);
             size.push(size_value);
         });
-        default_opacity = opacity;
-        default_size = size;
+        defaultOpacities = opacity;
+        defaultSizes = size;
         let trace = {
             x: x,
             y: y,
@@ -140,19 +140,19 @@
         return trace;
     }
 
-    function on_click(data) {
-        let selectedColor = '#f76d16';
-        let selectedOpacity = 1.;
-        let selectedSize = 8.;
+    function onClick(data) {
+        let {selectedColor, selectedOpacity, selectedSize} = sed_globals;
         console.log(data);
         console.log('Selected', data.points[0].text);
         let point = data.points[0];  // Only first selected point
         let selectedName = point.text;
-        
-        let colors = [...default_colors];  // copy from default
-        let opacities = [...default_opacity];
-        let sizes = [...default_size];
+        // Copy from default
+        let colors = [...defaultColors];
+        let opacities = [...defaultOpacities];
+        let sizes = [...defaultSizes];
+        // Highlight selected
         for(let i=0; i < point.data.text.length; i++) {
+            // Select all 6 bands that have the given name
             if(point.data.text[i] == selectedName) {
                 console.log('Index', i, 'has name', selectedName);
                 colors[i] = selectedColor;
@@ -160,12 +160,14 @@
                 sizes[i] = selectedSize;
             }
         }
+        // Pass updates to Plotly
         let update = {'marker.color': [colors], 'marker.size': [sizes],
                     'marker.opacity': [opacities]};
         Plotly.restyle(plotname, update, [point.curveNumber]);
         update = {title: 'Selected '+selectedName};
         Plotly.relayout(plotname, update);
-        sed_globals.selectGalaxySed(selectedName);  // Update SED
+        // Update SED
+        sed_globals.selectGalaxySed(selectedName);
     }
 
     plotFromCsv()
