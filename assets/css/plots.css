@@ -1,11 +1,25 @@
-.plot#uncertainty_validation {
+.c-plot {
+    display: none;
     max-width: 1300px;
+}
+.c-plot.c-active {
+    display: block;
+}
+
+.c-plot#true_vs_predicted {
     height: 600px;
 }
 
-.plot {
-    display: none;
+.c-plot#uncertainty_validation {
+    height: 600px;
 }
-.plot.active {
-    display: block;
+
+.c-plot#sed {
+    height: 600px;
+}
+
+/* DELETE */
+.c-plot#mainplot {
+    width: 800px;
+    height: 600px;
 }

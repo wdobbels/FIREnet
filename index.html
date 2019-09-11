@@ -7,25 +7,25 @@
     <link rel="stylesheet" href="assets/css/tabs.css">
     <link rel="stylesheet" href="assets/css/plots.css">
     <title>FIREnet - interactive plots</title>
+    <script src="https://cdn.plot.ly/plotly-1.49.4.min.js"></script>
 </head>
 <body>
     <!-- Tabs -->
     <div class="tabs">
         <div id="tvp-tab" class="tab"><span>True vs predicted</span></div>
-        <div id="unc-tab" class="tab active"><span>Uncertainty validation</span></div>
+        <div id="unc-tab" class="tab c-active"><span>Uncertainty validation</span></div>
     </div>
     <!-- Plots -->
-    <div id="true_vs_predicted" class="plot">True vs Predicted plot</div>
-    <div id="uncertainty_validation" class="plot active"></div>
-    <div id="sed" class="plot active">SED plot</div>
+    <div id="true_vs_predicted" class="c-plot"></div>
+    <div id="uncertainty_validation" class="c-plot c-active"></div>
+    <div id="sed" class="c-plot c-active"></div>
     <!-- Scripts -->
-    <script src="https://cdn.plot.ly/plotly-1.49.4.min.js"></script>
     <script src="https://d3js.org/d3-color.v1.min.js"></script>
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
     <script src="assets/js/tab_manager.js"></script>
     <script src="assets/js/plot_uncertainty_validation.js"></script>
-    <script src="assets/js/plot_sed.js"></script>
+    <script src="./assets/js/plot_sed.js"></script>
 </body>
 </html>
