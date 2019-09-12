@@ -15,6 +15,10 @@ This github repo provides the following:
 
 If you want an example of how the neural networks are trained or used, see the jupyter notebooks in the `notebooks` directory. We recommend viewing them using [nbviewer](https://nbviewer.jupyter.org/github/wdobbels/FIREnet/tree/master/notebooks/), although they can be opened directly from github as well.
 
+The notebooks can also be run dynamically using [binder](https://mybinder.org/v2/gh/wdobbels/FIREnet/master). This avoids the need to set up an environment locally, since the code is run in the cloud.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/wdobbels/FIREnet/master)
+
 ## Using the code locally
 
 The environment that was used to run the notebooks can be built from the either
