@@ -1,7 +1,7 @@
 .c-plot {
     display: none;
-    max-width: 1300px;
     margin: 0 auto;
+    max-width: 1000px;
 }
 .c-plot.c-active {
     display: block;
@@ -9,19 +9,12 @@
 
 .c-plot#true_vs_predicted {
     height: 800px;
-    max-width: 1100px;
 }
 
 .c-plot#uncertainty_validation {
-    height: 600px;
+    height: 500px;
 }
 
 .c-plot#sed {
-    height: 600px;
-}
-
-/* DELETE */
-.c-plot#mainplot {
-    width: 800px;
-    height: 600px;
+    height: 500px;
 }

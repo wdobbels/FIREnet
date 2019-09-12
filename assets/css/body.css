@@ -1,4 +1,45 @@
+:root {
+    --dark-bg: #fdefe2;
+    --light-bg: #fcf6ef;
+}
+
 .container {
     max-width: 700px;
-    margin: 0 auto;
+    margin: 8px auto;
+    padding: 10px 80px;
+    background-color: var(--light-bg);
+}
+
+section {
+    margin: 0;
+    border-bottom: 3px solid black;
+}
+
+html {
+    background-color: var(--dark-bg);
+}
+
+body {
+    margin: 0;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.3;
+}
+
+h1 {
+    font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;
+    font-weight: bold;
+}
+
+a {
+    color: #d6842f;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+#plot-section .container {
+    max-width: 1000px;
+    padding: 0;
 }

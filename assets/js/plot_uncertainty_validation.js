@@ -1,3 +1,5 @@
+let uncval_globals = {};
+
 // Put all in anonymous function to avoid scope overlap between scripts
 (function() {
     let plotname = 'uncertainty_validation';
@@ -9,6 +11,8 @@
     let defaultColors;
     let defaultOpacities;
     let defaultSizes;
+
+    let galNames;
 
     let plotDiv;
 
@@ -33,6 +37,7 @@
         }
         c = toColors(c);  // Immediately go to rgb/hex, so we can change on highlight
         defaultColors = c;
+        galNames = names;
         let traces = [scatterTrace(x, y, c, names), oneToOneTrace(false), 
                     oneToOneTrace(true), binnedTrace(xbin, ybin),
                     binnedTrace(xbin, ybin, true)];
@@ -56,7 +61,9 @@
                     text: 'Predicted - True',
                     font: {size: labelsize}
                 }
-            }
+            },
+            paper_bgcolor: '#fcf6ef',
+            plot_bgcolor: '#fffdfa'
         }
         Plotly.newPlot(plotDiv, traces, layout);
         plotDiv.on('plotly_click', onClick);
@@ -140,21 +147,17 @@
         return trace;
     }
 
-    function onClick(data) {
+    uncval_globals.selectGalaxy = function(galname) {
         let {selectedColor, selectedOpacity, selectedSize} = sed_globals;
-        console.log(data);
-        console.log('Selected', data.points[0].text);
-        let point = data.points[0];  // Only first selected point
-        let selectedName = point.text;
         // Copy from default
         let colors = [...defaultColors];
         let opacities = [...defaultOpacities];
         let sizes = [...defaultSizes];
         // Highlight selected
-        for(let i=0; i < point.data.text.length; i++) {
+        for(let i=0; i < galNames.length; i++) {
             // Select all 6 bands that have the given name
-            if(point.data.text[i] == selectedName) {
-                console.log('Index', i, 'has name', selectedName);
+            if(galNames[i] == galname) {
+                console.log('Index', i, 'has name', galname);
                 colors[i] = selectedColor;
                 opacities[i] = selectedOpacity;
                 sizes[i] = selectedSize;
@@ -162,10 +165,18 @@
         }
         // Pass updates to Plotly
         let update = {'marker.color': [colors], 'marker.size': [sizes],
-                    'marker.opacity': [opacities]};
-        Plotly.restyle(plotname, update, [point.curveNumber]);
-        update = {title: 'Selected '+selectedName};
+                      'marker.opacity': [opacities]};
+        Plotly.restyle(plotname, update, [0]);
+        update = {title: 'Selected '+galname};
         Plotly.relayout(plotname, update);
+    }
+
+    function onClick(data) {
+        let selectedName = data.points[0].text;
+        // Update current uncertainty validation plot
+        uncval_globals.selectGalaxy(selectedName);
+        // Update tvp plot
+        tvp_globals.selectGalaxy(selectedName);
         // Update SED
         sed_globals.selectGalaxySed(selectedName);
     }

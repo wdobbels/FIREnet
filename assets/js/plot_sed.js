@@ -69,7 +69,9 @@ let sed_globals = {
                     text: 'log(<i>L<sub>ν</sub></i> / (W/Hz))',
                     font: {size: labelsize}
                 }
-            }
+            },
+            paper_bgcolor: '#fcf6ef',
+            plot_bgcolor: '#fffdfa'
         }
         Plotly.newPlot(plotDiv, traces, layout);
     }
