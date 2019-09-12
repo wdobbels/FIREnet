@@ -11,7 +11,11 @@ This github repo provides the following:
 * a library of helper classes/functions
 * the DustPedia + H-ATLAS SED fitted data (about 23 MB)
 
-## Getting started
+## Notebooks
+
+If you want an example of how the neural networks are trained or used, see the jupyter notebooks in the `notebooks` directory. We recommend viewing them using [nbviewer](https://nbviewer.jupyter.org/github/wdobbels/FIREnet/tree/master/notebooks/), although they can be opened directly from github as well.
+
+## Using the code locally
 
 The environment that was used to run the notebooks can be built from the either
 `environment.yml` (conda) or `environment.txt` (pip). We strongly recommend using
