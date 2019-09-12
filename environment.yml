@@ -6,6 +6,7 @@ channels:
 dependencies:
   - python>=3.6
   - numpy
+  - scipy
   - pandas
   - matplotlib
   - scikit-learn
@@ -13,3 +14,4 @@ dependencies:
   - skorch
   - astropy
   - jupyterlab
+  - ipywidgets
