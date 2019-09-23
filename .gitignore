@@ -113,3 +113,9 @@ venv.bak/
 history.json
 # Model checkpoints
 models/checkpoints/
+# Directories used for setting up this repo
+binder/
+plot_creation/
+# Jekyll
+_site
+Gemfile.lock
