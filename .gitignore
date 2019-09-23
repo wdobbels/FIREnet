@@ -119,3 +119,4 @@ plot_creation/
 # Jekyll
 _site
 Gemfile.lock
+assets/raw/

@@ -1,0 +1,10 @@
+<section>
+    <div class="container image-banner">
+        {% assign testvar = "testval" %}
+        <div class="image-banner-text {% if include.leftimage %}text-right{% endif %}">
+            <h3>{{ include.title }}</h3>
+            <p>{{ include.text }}</p>
+        </div>
+        <img src={{ include.imagefile }} alt={{ include.title }}>
+    </div>
+</section>
