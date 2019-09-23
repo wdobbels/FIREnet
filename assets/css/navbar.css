@@ -1,0 +1,42 @@
+.navbar {
+    display: flex;
+    justify-content: center;
+    background-color: var(--light-bg);
+    border-bottom: 3px solid black;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 10;
+}
+
+.navbar a {
+    display: block;
+    width: 130px;
+    text-align: center;
+    padding: 7px 5px 8px;
+    color: black;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    text-decoration: none;
+    color: #d6842f;
+    background-color: var(--dark-bg);
+}
+
+.navbar span {
+    display: block;
+    width: 200px;
+    padding: 11px 5px 4px;
+    color: black;
+    font-weight: bold;
+    position: absolute;
+    left: 50px;
+    font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;
+    font-size: 1.3rem;
+}
+
+.spacer{
+    height: 42px;
+    width: 100%;
+}

@@ -1,50 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="assets/css/body.css">
-    <link rel="stylesheet" href="assets/css/tabs.css">
-    <link rel="stylesheet" href="assets/css/plots.css">
-    <title>FIREnet - interactive plots</title>
-    <script src="https://cdn.plot.ly/plotly-1.49.4.min.js"></script>
-</head>
-<body>
-    <!-- Header -->
-    <section id="header">
-        <div class="container">
-            <h1>FIREnet: interactive plots</h1>
-            <p>Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
-                    aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
-                    galaxy, based on the ultraviolet to mid-infrared (UV&#8211;MIR) SED.</p>
-            <p>Below you can find the interactive figures for the FIREnet project. The main github page, with its scripts and jupyter notebooks, can be found <a href="https://github.com/wdobbels/FIREnet">here</a>. The accompanying paper, <i>"Predicting the global far-infrared SED of galaxies via machine learning techniques"</i>, will be linked here once accepted.
-            </p>
-            <p><i>Click on the tabs below to switch figures. Click on one of the data points to select a particular galaxy, which then also shows its SED in the plot below. Clicking on the legend elements allows you to show/hide elements.</i></p>
+---
+title: FIREnet - interactive plots
+includeplotly: true
+layout: default
+---
+<!-- Header -->
+<section id="header">
+    <div class="container">
+        <h1>Interactive plots</h1>
+        <p>Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
+                aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
+                galaxy, based on the ultraviolet to mid-infrared (UV&#8211;MIR) SED.</p>
+        <p>Below you can find the interactive figures for the FIREnet project. The main github page, with its scripts and jupyter notebooks, can be found <a href="https://github.com/wdobbels/FIREnet">here</a>. The accompanying paper, <i>"Predicting the global far-infrared SED of galaxies via machine learning techniques"</i>, will be linked here once accepted.
+        </p>
+        <p><i>Click on the tabs below to switch figures. Click on one of the data points to select a particular galaxy, which then also shows its SED in the plot below. Clicking on the legend elements allows you to show/hide elements.</i></p>
+    </div>
+</section>
+<section id="plot-section">
+    <div class="container">
+        <div class="tabs">
+            <div id="tvp-tab" class="tab c-active"><span>Predicted vs True</span></div>
+            <div id="unc-tab" class="tab"><span>Uncertainty Validation</span></div>
         </div>
-    </section>
-    <section id="plot-section">
-        <div class="container">
-            <div class="tabs">
-                <div id="tvp-tab" class="tab c-active"><span>Predicted vs True</span></div>
-                <div id="unc-tab" class="tab"><span>Uncertainty Validation</span></div>
-            </div>
-            <!-- Plots -->
-            <div id="true_vs_predicted" class="c-plot c-active"></div>
-            <div id="uncertainty_validation" class="c-plot"></div>
-            <div id="sed" class="c-plot c-active"></div>
-        </div>
-        <!-- Tabs -->
-    </section>
-    
-    <!-- Scripts -->
-    <script src="https://d3js.org/d3-color.v1.min.js"></script>
-    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
-    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <!-- Plots -->
+        <div id="true_vs_predicted" class="c-plot c-active"></div>
+        <div id="uncertainty_validation" class="c-plot"></div>
+        <div id="sed" class="c-plot c-active"></div>
+    </div>
+    <!-- Tabs -->
+</section>
 
-    <script src="assets/js/tab_manager.js"></script>
-    <script src="./assets/js/plot_tvp.js"></script>
-    <script src="assets/js/plot_uncertainty_validation.js"></script>
-    <script src="./assets/js/plot_sed.js"></script>
-</body>
-</html>
+<!-- Scripts -->
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<script src="assets/js/tab_manager.js"></script>
+<script src="./assets/js/plot_tvp.js"></script>
+<script src="assets/js/plot_uncertainty_validation.js"></script>
+<script src="./assets/js/plot_sed.js"></script>

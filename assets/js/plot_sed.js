@@ -134,7 +134,6 @@ let sed_globals = {
     }
 
     sed_globals.selectGalaxySed = function(galname) {
-        console.log("Selected", galname, "in SED");
         selected = galname;
         let fluxes = galname_fluxes[selected];
         let flux_values, err_values, wls, bandnames;

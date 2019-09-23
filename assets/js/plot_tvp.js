@@ -32,7 +32,6 @@ let tvp_globals = {};
                 band_fluxes[band].push(val);
             });
         });
-        console.log(band_fluxes);
         createPlot();
     }
 
@@ -189,14 +188,12 @@ let tvp_globals = {};
     tvp_globals.selectGalaxy = function(galname) {
         let {selectedColor, selectedOpacity, selectedSize} = sed_globals;
         let i, j;
-        console.log('Selected', galname);
         // Copy from default
         let colors = [], traceIds = [];
         for (i=0; i < defaultColors.length; i++) {
             colors.push([...defaultColors[i]]);
             traceIds.push(i);
         }
-        console.log(colors);
         let opacities = [...defaultOpacities];
         let sizes = [...defaultSizes];
         let galnames = band_fluxes['galname'];
@@ -210,7 +207,6 @@ let tvp_globals = {};
                 sizes[i] = selectedSize;
             }
         }
-        console.log(colors);
         // Pass updates to Plotly
         let update = {'marker.color': colors, 'marker.size': [sizes],
                       'marker.opacity': [opacities]};

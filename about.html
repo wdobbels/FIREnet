@@ -1,43 +1,33 @@
 ---
+title: FIREnet - about
+includebanner: true
+layout: default
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="assets/css/body.css">
-    <link rel="stylesheet" href="assets/css/imagebanner.css">
-    <title>FIREnet - about</title>
-</head>
-<body>
-    <section>
-        <div class="container">
-            <h1>FIREnet</h1>
-            <p>Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
-                    aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
-                    galaxy, based on the ultraviolet to mid-infrared (UV&#8211;MIR) SED.</p>
-            <p>Below you can find an overview of the FIREnet project. The main github page, with its scripts and jupyter notebooks, can be found <a href="https://github.com/wdobbels/FIREnet">here</a>. The accompanying paper, <i>"Predicting the global far-infrared SED of galaxies via machine learning techniques"</i>, will be linked here once accepted.
-            </p>
-        </div>
-    </section>
-    {% include imagebanner.html
-        title="Data sets"
-        text='We use data from <a href="http://dustpedia.com" target="_blank" rel="noopener noreferrer">DustPedia</a> (715 galaxies) and <a href="https://www.h-atlas.org/" target="_blank" rel="noopener noreferrer">H-ATLAS</a> (3618 galaxies). Both contain about 20 broadband fluxes from the ultraviolet (UV) to far-infrared (FIR).' 
-        imagefile="/assets/img/dustpedia.jpg" %}
-    {% include imagebanner.html
-        title="SED fitting"
-        text='We fit realistic galaxy models to the UV-FIR data using <a href="https://cigale.lam.fr/">CIGALE</a>, and extract a Bayesian estimate of each broadband flux. This is done for both input (14 UV&#8211;MIR fluxes) and output (6 FIR fluxes).' 
-        imagefile="/assets/img/sedfit.jpg"
-        leftimage=true %}
-    {% include imagebanner.html
-        title="training"
-        text='Shallow neural networks are used to transform an input vector into a prediction vector. The weights are optimised using a <i>training set</i>.' 
-        imagefile="/assets/img/neuralnet.jpg"%}
-    {% include imagebanner.html
-        title="evaluating"
-        text='The predictions are compared to the ground truth on a <i>test set</i>. We find a global RMSE of 0.19 dex, vastly outperforming a traditional SED fitting method (0.38 dex).' 
-        imagefile="/assets/img/evaluating.jpg"
-        leftimage=true %}
-</body>
-</html>
+<section>
+    <div class="container">
+        <h1>About FIREnet</h1>
+        <p>Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
+                aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
+                galaxy, based on the ultraviolet to mid-infrared (UV&#8211;MIR) SED.</p>
+        <p>Below you can find an overview of the FIREnet project. The main github page, with its scripts and jupyter notebooks, can be found <a href="https://github.com/wdobbels/FIREnet">here</a>. The accompanying paper, <i>"Predicting the global far-infrared SED of galaxies via machine learning techniques"</i>, will be linked here once accepted.
+        </p>
+    </div>
+</section>
+{% include imagebanner.html
+    title="Data sets"
+    text='We use data from <a href="http://dustpedia.com" target="_blank" rel="noopener noreferrer">DustPedia</a> (715 galaxies) and <a href="https://www.h-atlas.org/" target="_blank" rel="noopener noreferrer">H-ATLAS</a> (3618 galaxies). Both contain about 20 broadband fluxes from the ultraviolet (UV) to far-infrared (FIR).' 
+    imagefile="/assets/img/dustpedia.jpg" %}
+{% include imagebanner.html
+    title="SED fitting"
+    text='We fit realistic galaxy models to the UV-FIR data using <a href="https://cigale.lam.fr/">CIGALE</a>, and extract a Bayesian estimate of each broadband flux. This is done for both input (14 UV&#8211;MIR fluxes) and output (6 FIR fluxes).' 
+    imagefile="/assets/img/sedfit.jpg"
+    leftimage=true %}
+{% include imagebanner.html
+    title="training"
+    text='Shallow neural networks are used to transform an input vector into a prediction vector. The weights are optimised using a <i>training set</i>.' 
+    imagefile="/assets/img/neuralnet.jpg"%}
+{% include imagebanner.html
+    title="evaluating"
+    text='The predictions are compared to the ground truth on a <i>test set</i>. We find a global RMSE of 0.19 dex, vastly outperforming a traditional SED fitting method (0.38 dex).' 
+    imagefile="/assets/img/evaluating.jpg"
+    leftimage=true %}

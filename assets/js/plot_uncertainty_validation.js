@@ -157,7 +157,6 @@ let uncval_globals = {};
         for(let i=0; i < galNames.length; i++) {
             // Select all 6 bands that have the given name
             if(galNames[i] == galname) {
-                console.log('Index', i, 'has name', galname);
                 colors[i] = selectedColor;
                 opacities[i] = selectedOpacity;
                 sizes[i] = selectedSize;
