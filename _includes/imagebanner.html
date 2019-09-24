@@ -5,6 +5,6 @@
             <h3>{{ include.title }}</h3>
             <p>{{ include.text }}</p>
         </div>
-        <img src={{ include.imagefile }} alt={{ include.title }}>
+        <img src={{ include.imagefile | relative_url }} alt={{ include.title }}>
     </div>
 </section>
