@@ -15,19 +15,19 @@ layout: default
 {% include imagebanner.html
     title="Data sets"
     text='We use data from <a href="http://dustpedia.com" target="_blank" rel="noopener noreferrer">DustPedia</a> (715 galaxies) and <a href="https://www.h-atlas.org/" target="_blank" rel="noopener noreferrer">H-ATLAS</a> (3618 galaxies). Both contain about 20 broadband fluxes from the ultraviolet (UV) to far-infrared (FIR).' 
-    imagefile="/assets/img/dustpedia.jpg" %}
+    imagefile="assets/img/dustpedia.jpg" %}
 {% include imagebanner.html
     title="SED fitting"
     text='We fit realistic galaxy models to the UV-FIR data using <a href="https://cigale.lam.fr/">CIGALE</a>, and extract a Bayesian estimate of each broadband flux. This is done for both input (14 UV&#8211;MIR fluxes) and output (6 FIR fluxes).' 
-    imagefile="/assets/img/sedfit.jpg"
+    imagefile="assets/img/sedfit.jpg"
     leftimage=true %}
 {% include imagebanner.html
     title="training"
     text='Shallow neural networks are used to transform an input vector into a prediction vector. The weights are optimised using a <i>training set</i>.' 
-    imagefile="/assets/img/neuralnet.jpg"%}
+    imagefile="assets/img/neuralnet.jpg"%}
 {% include imagebanner.html
     title="evaluating"
     text='The predictions are compared to the ground truth on a <i>test set</i>. We find a global RMSE of 0.19 dex, vastly outperforming a traditional SED fitting method (0.38 dex).' 
-    imagefile="/assets/img/evaluating.jpg"
+    imagefile="assets/img/evaluating.jpg"
     leftimage=true %}
 <script src="/assets/js/reveal.js"></script>
