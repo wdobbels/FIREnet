@@ -1,7 +1,10 @@
 .image-banner {
     display: flex;
     justify-content: space-between;
+    min-height: 250px;
+    align-items: center;
     /* max-width: 1000px; */
+    transition: opacity 1s;
 }
 
 .container.image-banner {
@@ -12,9 +15,6 @@
     flex-grow: 1;
     text-align: justify;
     padding: 0 25px 0 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 .image-banner h3 {
@@ -29,12 +29,21 @@
 
 .image-banner img {
     width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: block;
 }
 
 .image-banner .image-banner-text.text-right {
     order: 1;
     padding: 0 0 0 25px;
+}
+
+#about-header {
+    min-height: 35vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hidden {
+    opacity: 0;
 }

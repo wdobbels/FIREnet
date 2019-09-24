@@ -34,9 +34,20 @@
     left: 50px;
     font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;
     font-size: 1.3rem;
+    /* flex-shrink: 2; */
 }
 
 .spacer{
     height: 42px;
     width: 100%;
+}
+
+@media (max-width: 800px) {
+    .navbar a {
+        width: 100px;
+    }
+    .navbar span {
+        position: relative;
+        left: auto;
+    }
 }

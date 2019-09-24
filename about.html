@@ -3,14 +3,13 @@ title: FIREnet - about
 includebanner: true
 layout: default
 ---
-<section>
+<section id="about-header">
     <div class="container">
-        <h1>About FIREnet</h1>
+        <h1>A virtual FIR telescope</h1>
         <p>Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
                 aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
                 galaxy, based on the ultraviolet to mid-infrared (UV&#8211;MIR) SED.</p>
-        <p>Below you can find an overview of the FIREnet project. The main github page, with its scripts and jupyter notebooks, can be found <a href="https://github.com/wdobbels/FIREnet">here</a>. The accompanying paper, <i>"Predicting the global far-infrared SED of galaxies via machine learning techniques"</i>, will be linked here once accepted.
-        </p>
+        <p>FIR radiation is emitted by cold dust, and hence distinct from the UV&#8211;NIR SED which is emitted by stars. The FIR is very hard to observe, and currently no FIR space telescopes are available or even confirmed. By predicting it from the UV&#8211;MIR we can build a "virtual telescope", which can bridge the gap until the next FIR space mission. </p>
     </div>
 </section>
 {% include imagebanner.html
@@ -31,3 +30,4 @@ layout: default
     text='The predictions are compared to the ground truth on a <i>test set</i>. We find a global RMSE of 0.19 dex, vastly outperforming a traditional SED fitting method (0.38 dex).' 
     imagefile="/assets/img/evaluating.jpg"
     leftimage=true %}
+<script src="/assets/js/reveal.js"></script>
