@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="assets/css/navbar.css">
+    <link rel="stylesheet" href="assets/css/body.css">
+    <title>FIREnet - interactive plots</title>
+    <link rel="stylesheet" href="assets/css/plots.css">
+    <link rel="stylesheet" href="assets/css/tabs.css">
+    <script src="https://cdn.plot.ly/plotly-1.49.4.min.js"></script>
+</head>
+<body>
+    <header class="navbar">
+        <span>FIREnet</span>
+        <a href="index.html">plots</a>
+        <a href="about.html">about</a>
+        <a href="https://github.com/wdobbels/FIREnet">github</a>
+        <a href="#">paper</a>
+    </header>
+    <div class="spacer">
+        &nbsp;
+    </div>
+   <!-- Header (can be removed)-->
+    <section id="header">
+        <div class="container">
+            <h1>Interactive plots</h1>
+            <p>Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
+                    aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
+                    galaxy, based on the ultraviolet to mid-infrared (UV&#8211;MIR) SED.</p>
+            <p><b>Click on:</b>
+                <ul>
+                    <li>tabs to switch figure (predicted vs true / uncertainty validation)</li>
+                    <li>data points to select a particular galaxy and show its SED in the bottom panel</li>
+                    <li>a legend entry to show/hide elements</li>
+                </ul>
+            </p>
+        </div>
+    </section>
+    <section id="plot-section">
+        <div class="container">
+            <!-- Tabs -->
+            <div class="tabs">
+                <div id="tvp-tab" class="tab c-active"><span>Predicted vs True</span></div>
+                <div id="unc-tab" class="tab"><span>Uncertainty Validation</span></div>
+            </div>
+            <!-- Plots -->
+            <div id="true_vs_predicted" class="c-plot c-active"></div>
+            <div id="uncertainty_validation" class="c-plot"></div>
+            <div id="sed" class="c-plot c-active"></div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    <script src="./assets/js/tab_manager.js"></script>
+    <script src="./assets/js/plot_tvp.js"></script>
+    <script src="./assets/js/plot_uncertainty_validation.js"></script>
+    <script src="./assets/js/plot_sed.js"></script>
+   <div class="spacer">
+        &nbsp;
+    </div>
+</body>
+</html>
