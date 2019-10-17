@@ -3,7 +3,7 @@ Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
 aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
 galaxy, based on the ultraviolet to mid-infrared (UV-MIR) SED.
 
-## >>> **Interactive plots** can be found **[here](https://wdobbels.github.io/FIREnet/)** <<<
+### >>> **Interactive plots** can be found **[here](https://wdobbels.github.io/FIREnet/)** <<<
 
 This github repo provides the following:  
 * jupyter notebooks that guide the process from raw data to a fully trained model
@@ -53,4 +53,4 @@ your favourite machine learning environment.
 
 ## Citation
 
-This work is accompanied by the paper *"Predicting the global far-infrared SED of galaxies via machine learning techniques"*. The paper will be linked here once accepted.
+This work is accompanied by the paper *"Predicting the global far-infrared SED of galaxies via machine learning techniques"*. The paper can be found [here](https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D/abstract) ([arXiv pdf](https://arxiv.org/pdf/1910.06330.pdf)). If you use this work, please cite the paper. An official citation will be linked here once the paper is fully published by A&A.
