@@ -43,5 +43,19 @@ your favourite machine learning environment.
 
 ## Citation
 
-If you use this code, please cite the following paper:
-`INSERT PAPER`
+This github page is based on the following [paper](https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D/abstract) ([arXiv pdf](https://arxiv.org/pdf/1910.06330.pdf)). If you use this work, please cite the paper (this citation will be updated once the paper is fully published by A&A, so please refer back later):
+```
+@ARTICLE{2019arXiv191006330D,
+       author = {{Dobbels}, W. and {Baes}, M. and {Viaene}, S. and {Bianchi}, S. and
+         {Davies}, J.~I. and {Casasola}, V. and {Clark}, C.~J.~R. and
+         {Fritz}, J. and {Galametz}, M. and {Galliano}, F. and {Mosenkov}, A. and
+         {Nersesian}, A. and {Tr{\v{c}}ka}, A.},
+        title = "{Predicting the global far-infrared SED of galaxies via machine learning techniques}",
+      journal = {\aap},
+     keywords = {Galaxies: photometry, Galaxies: ISM, Infrared: galaxies, Astrophysics - Astrophysics of Galaxies},
+         year = "2019",
+        month = "Oct",
+       eprint = {1910.06330},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D},
+}
+```
