@@ -3,13 +3,23 @@ Far-InfraRed Emission Networks (FIRE-net) is a machine learning framework that
 aims to estimate the far-infrared (FIR) spectral energy distribution (SED) of a
 galaxy, based on the ultraviolet to mid-infrared (UV-MIR) SED.
 
+### >>> **Interactive plots** can be found **[here](https://wdobbels.github.io/FIREnet/)** <<<
+
 This github repo provides the following:  
 * jupyter notebooks that guide the process from raw data to a fully trained model
 * a jupyter notebook that shows how to apply our fiducial model quickly
 * a library of helper classes/functions
 * the DustPedia + H-ATLAS SED fitted data (about 23 MB)
 
-## Getting started
+## Notebooks
+
+If you want an example of how the neural networks are trained or used, see the jupyter notebooks in the `notebooks` directory. We recommend viewing them using [nbviewer](https://nbviewer.jupyter.org/github/wdobbels/FIREnet/tree/master/notebooks/), although they can be opened directly from github as well.
+
+The notebooks can also be run dynamically using [binder](https://mybinder.org/v2/gh/wdobbels/FIREnet/master). This avoids the need to set up an environment locally, since the code is run in the cloud.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/wdobbels/FIREnet/master)
+
+## Using the code locally
 
 The environment that was used to run the notebooks can be built from the either
 `environment.yml` (conda) or `environment.txt` (pip). We strongly recommend using
@@ -43,19 +53,4 @@ your favourite machine learning environment.
 
 ## Citation
 
-This github page is based on the following [paper](https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D/abstract) ([arXiv pdf](https://arxiv.org/pdf/1910.06330.pdf)). If you use this work, please cite the paper (this citation will be updated once the paper is fully published by A&A, so please refer back later):
-```
-@ARTICLE{2019arXiv191006330D,
-       author = {{Dobbels}, W. and {Baes}, M. and {Viaene}, S. and {Bianchi}, S. and
-         {Davies}, J.~I. and {Casasola}, V. and {Clark}, C.~J.~R. and
-         {Fritz}, J. and {Galametz}, M. and {Galliano}, F. and {Mosenkov}, A. and
-         {Nersesian}, A. and {Tr{\v{c}}ka}, A.},
-        title = "{Predicting the global far-infrared SED of galaxies via machine learning techniques}",
-      journal = {\aap},
-     keywords = {Galaxies: photometry, Galaxies: ISM, Infrared: galaxies, Astrophysics - Astrophysics of Galaxies},
-         year = "2019",
-        month = "Oct",
-       eprint = {1910.06330},
-       adsurl = {https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D},
-}
-```
+This work is accompanied by the paper *"Predicting the global far-infrared SED of galaxies via machine learning techniques"*. The paper can be found [here](https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D/abstract) ([arXiv pdf](https://arxiv.org/pdf/1910.06330.pdf)). If you use this work, please cite the paper. An official citation will be linked here once the paper is fully published by A&A.
