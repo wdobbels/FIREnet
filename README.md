@@ -53,4 +53,24 @@ your favourite machine learning environment.
 
 ## Citation
 
-This work is accompanied by the paper *"Predicting the global far-infrared SED of galaxies via machine learning techniques"*. The paper can be found [here](https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D/abstract) ([arXiv pdf](https://arxiv.org/pdf/1910.06330.pdf)). If you use this work, please cite the paper. An official citation will be linked here once the paper is fully published by A&A.
+This work is accompanied by the paper *"Predicting the global far-infrared SED of galaxies via machine learning techniques"*. The paper can be found [here](https://ui.adsabs.harvard.edu/abs/2019arXiv191006330D/abstract) ([arXiv pdf](https://arxiv.org/pdf/1910.06330.pdf), [full paper](https://www.aanda.org/articles/aa/pdf/2020/02/aa36695-19.pdf)). If you use this work, please cite the paper. Following bibtex can be used:
+
+```
+@ARTICLE{2020A&A...634A..57D,
+       author = {{Dobbels}, W. and {Baes}, M. and {Viaene}, S. and {Bianchi}, S. and
+         {Davies}, J.~I. and {Casasola}, V. and {Clark}, C.~J.~R. and
+         {Fritz}, J. and {Galametz}, M. and {Galliano}, F. and {Mosenkov}, A. and
+         {Nersesian}, A. and {Tr{\v{c}}ka}, A.},
+        title = "{Predicting the global far-infrared SED of galaxies via machine learning techniques}",
+      journal = {\aap},
+     keywords = {galaxies: photometry, galaxies: ISM, infrared: galaxies, Astrophysics - Astrophysics of Galaxies},
+         year = 2020,
+        month = feb,
+       volume = {634},
+          eid = {A57},
+        pages = {A57},
+          doi = {10.1051/0004-6361/201936695},
+       eprint = {1910.06330},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020A&A...634A..57D},
+}
+```
